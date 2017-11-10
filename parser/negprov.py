@@ -7,21 +7,9 @@ import os
 
 from dedalus import TrivialSemantics
 
-'''
-TODOS:
-Figure out what is going on with subgoallist
-'''
-
-#TODO, figure out method to use this to walk the program. figure out if there is an end state.
-# create an init function so that we can open a file to dump the output into
 class NegNodeWalker(NodeWalker):
 
     def walk_program(self,node):
-        ''' In here will want to walk through the rules, get the negated versions printed out,if reach a negated rule, negate it, determine
-            if reach a notin, negate it, walk below. return up. also want to create a file that we will dump all of this to. Currently  think 
-            just  dump to stdout because im lazy
-        '''
-        # STEP 1: figure out how to get the actual string of one of these classes.
         # Walk the includes
         print "WALK_PROGRAM"
         print self.walk(node.includes)
