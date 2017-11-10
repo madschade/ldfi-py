@@ -72,7 +72,6 @@ prepare(Agent, Coord, Xact)@async :- running(Coord, Xact), agent(Coord, Agent);"
         prog = 'log(Node, Pload)@next :- log(Node, Pload), notin frog(Node); frog(Node)@next :- bob(Node);'
         model = self.parser_asmodel.parse(prog)
         walker = NegNodeWalker()
-        walker.walk(model)
 
     def test_qual(self):
         prog = 'a(X, Y) :- b(X, Y), Y != X;';
