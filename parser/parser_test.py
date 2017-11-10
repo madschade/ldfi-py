@@ -1,9 +1,12 @@
 import tatsu
 from tatsu.ast import AST
 from tatsu.walkers import NodeWalker
+from tatsu.model import ModelBuilderSemantics
 from pprint import pprint
 import unittest
 from dedalus import TrivialSemantics, DedalusSemantics
+
+from negprov import NegNodeWalker
 
 
 class GrammarTest(unittest.TestCase):
@@ -11,6 +14,9 @@ class GrammarTest(unittest.TestCase):
     def setUp(self):
         self.grammar = open('dedalus.tatsu').read()
         self.parser = tatsu.compile(self.grammar)
+
+        self.grammar_asmodel = open('dedalus_asmodel.tatsu').read()
+        self.parser_asmodel = tatsu.compile(self.grammar, asmodel=True)
 
 
     def test_simple(self):
@@ -60,6 +66,12 @@ prepare(Agent, Coord, Xact)@async :- running(Coord, Xact), agent(Coord, Agent);"
         prog = 'bcast("a", 1)@1;';
         ast = self.parser.parse(prog, trace=False, colorize=True, semantics=TrivialSemantics())
         self.assertEqual(str(ast), prog)
+
+    def test_negation(self):
+        prog = 'log(Node, Pload)@next :- log(Node, Pload), notin frog(Node); frog(Node)@next :- bob(Node);'
+        model = self.parser_asmodel.parse(prog)
+        walker = NegNodeWalker()
+        walker.walk(model)
 
     def test_qual(self):
         prog = 'a(X, Y) :- b(X, Y), Y != X;';
