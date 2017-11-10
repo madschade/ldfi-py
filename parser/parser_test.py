@@ -16,7 +16,7 @@ class GrammarTest(unittest.TestCase):
         self.parser = tatsu.compile(self.grammar)
 
         self.grammar_asmodel = open('dedalus_asmodel.tatsu').read()
-        self.parser_asmodel = tatsu.compile(self.grammar, asmodel=True)
+        self.parser_asmodel = tatsu.compile(self.grammar_asmodel, asmodel=True)
 
 
     def test_simple(self):
@@ -68,6 +68,7 @@ prepare(Agent, Coord, Xact)@async :- running(Coord, Xact), agent(Coord, Agent);"
         self.assertEqual(str(ast), prog)
 
     def test_negation(self):
+        print "TEST NEGATION"
         prog = 'log(Node, Pload)@next :- log(Node, Pload), notin frog(Node); frog(Node)@next :- bob(Node);'
         model = self.parser_asmodel.parse(prog)
         walker = NegNodeWalker()
